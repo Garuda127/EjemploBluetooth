@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Encender bluetooth
         mOnBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onClick(View view) {
                 if (!mBlueAdapter.isEnabled()) {
@@ -67,16 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     toast.show();
                     //intent para encender bluetooth
                     Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
+
                     startActivityForResult(intent, REQUEST_ENABLE_BT);
                 } else {
                     Toast toast = Toast.makeText(getApplicationContext(), "El bluetooth ya esta encendido", Toast.LENGTH_SHORT);
@@ -87,18 +80,10 @@ public class MainActivity extends AppCompatActivity {
 
         // encontrar dispositivos
         mDiscoverBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
+
                 if (!mBlueAdapter.isDiscovering()) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Descubriendo Dispositivos", Toast.LENGTH_SHORT);
                     toast.show();
@@ -109,20 +94,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //boton de apagado click
-        mPairedBtn.setOnClickListener(new View.OnClickListener() {
+        mOffBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onClick(View view) {
                 if (mBlueAdapter.isEnabled()) {
-                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
+
                     mBlueAdapter.disable();
                     Toast toast = Toast.makeText(getApplicationContext(), "Apagando bluetooth", Toast.LENGTH_SHORT);
                     toast.show();
@@ -137,21 +114,13 @@ public class MainActivity extends AppCompatActivity {
 
         //emparejar dispositivos
         mPairedBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onClick(View v) {
                 if (mBlueAdapter.isEnabled()) {
                     mPairedTv.setText("Dispositivos emparejados");
-                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
+
+                    @SuppressLint("MissingPermission") Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
                     for (BluetoothDevice device: devices){
                         mPairedTv.append("\nDispositivo: " + device.getName()+ ", " + device);
                     }
